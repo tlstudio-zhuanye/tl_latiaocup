@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# 每日地图页允许抓取（内容每日更新）
+User-agent: Bingbot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+Sitemap: https://tlbs.top/sitemap.xml
