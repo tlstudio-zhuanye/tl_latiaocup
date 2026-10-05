@@ -158,7 +158,9 @@ textarea{resize:vertical;min-height:74px}
 
 <script>
 const API = "https://api.tlstudio.cn/latiao/signup";
-const API_BASE = "https://api.tlstudio.cn/latiao";
+// ★ 基准必须是站点根，不能带 /latiao：下面拼的是 "/latiao/status"，
+//   写成 ".../latiao" 会拼成 /latiao/latiao/status（404），拒签横幅就永远不亮。
+const API_BASE = "https://api.tlstudio.cn";
 const $ = id => document.getElementById(id);
 
 // ---------- 拒签自查：本机存过报名人 → 打开页面就显示「您已被拒签，请尝试再次申请」 ----------
