@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>查审核结果 · 2026—2027 辣条杯「天外来物」主题赛</title>
+<meta name="description" content="输入报名码，查看辣条杯天外来物主题赛报名是否通过审核。">
+<meta name="author" content="TLSTUDIO × TLDOUBLERSTUDIO">
+<link rel="canonical" href="https://tlbs.top/query.html">
+<link rel="icon" href="assets/img/logo-tlstudio.png">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="查审核结果 · 辣条杯「天外来物」主题赛">
+<meta property="og:description" content="报名后凭报名码，随时查看自己过没过审。">
+<meta property="og:url" content="https://tlbs.top/query.html">
+<style>
+:root{
+  --bg:#07080c; --bg-2:#0b0d14; --surface:#10131d; --surface-2:#151928;
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.16);
+  --text:#eef1f7; --muted:#8a93a8; --dim:#565e73;
+  --blue:#1d9cd8; --cyan:#38e1ff; --violet:#7c5cff;
+  --grad:linear-gradient(120deg,#38e1ff 0%,#7c5cff 100%);
+  --green:#22c55e; --red:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);
+  font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+  line-height:1.7;min-height:100vh}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(620px,92vw);margin:0 auto;padding:34px 0 70px}
+header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
+  background:rgba(7,8,12,.8);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;gap:12px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800}
+.brand img{height:26px;width:auto}
+.brand small{display:block;font-weight:500;font-size:11px;color:var(--muted)}
+.nav ul{display:flex;gap:4px;margin-left:auto;list-style:none}
+.nav ul a{display:block;padding:7px 12px;border-radius:8px;font-size:14px;color:var(--muted)}
+.nav ul a:hover{color:var(--text);background:var(--surface-2)}
+.kicker{display:inline-flex;align-items:center;gap:9px;font:600 12px/1 ui-monospace,monospace;
+  letter-spacing:.2em;color:var(--cyan);border:1px solid var(--line-2);
+  padding:8px 14px;border-radius:999px;background:rgba(56,225,255,.06);margin-top:30px}
+h1{font-size:clamp(24px,4.4vw,38px);margin:14px 0 8px}
+h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);font-size:14.5px;margin-bottom:22px}
+.card{background:linear-gradient(180deg,var(--surface),var(--bg-2));
+  border:1px solid var(--line);border-radius:16px;padding:26px}
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+label{font-size:13.5px;font-weight:700;color:#c9d2e0}
+input[type=text]{background:var(--bg-2);border:1px solid var(--line-2);border-radius:10px;
+  padding:13px 15px;color:var(--text);font-size:19px;letter-spacing:.28em;
+  text-align:center;font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;
+  text-transform:uppercase;outline:none;transition:border-color .2s;width:100%}
+input[type=text]::placeholder{letter-spacing:.28em;color:var(--dim)}
+input[type=text]:focus{border-color:var(--cyan)}
+.submit{width:100%;padding:14px;border:none;border-radius:12px;background:var(--grad);
+  color:#06121a;font-size:16px;font-weight:800;cursor:pointer;
+  box-shadow:0 18px 60px rgba(56,225,255,.15);transition:.22s}
+.submit:hover{transform:translateY(-2px)}
+.submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.msg{display:none;margin-top:16px;padding:15px 18px;border-radius:11px;font-size:15px;line-height:1.7}
+.msg.on{display:block}
+.msg.ok{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.45);color:#9df3bb}
+.msg.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.4);color:#ffb4b4}
+.msg.wait{background:rgba(56,225,255,.1);border:1px solid rgba(56,225,255,.4);color:#bfeaf8}
+.msg b{display:block;font-size:19px;margin-bottom:5px}
+.msg.err b{color:#ff8f8f}
+.msg.wait b{color:var(--cyan)}
+.msg.ok b{color:var(--green)}
+.tips{color:var(--dim);font-size:12.5px;margin-top:15px;text-align:center}
+.tips a{color:var(--cyan);text-decoration:underline}
+.tips b{color:var(--muted)}
+.card.foot{text-align:center;color:var(--dim);font-size:12.5px;margin-top:18px}
+@media (max-width:640px){.nav ul{display:none}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-in" style="padding:0;width:min(1180px,92vw)">
+    <a class="brand" href="index.html">
+      <img src="assets/img/logo-tlstudio.png" alt="TLSTUDIO">
+      <span>辣条杯 · 天外来物<small>2026—2027 LATIAO CUP</small></span>
+    </a>
+    <ul>
+      <li><a href="index.html#about">赛事</a></li>
+      <li><a href="index.html#tasks">任务</a></li>
+      <li><a href="index.html#download">下载</a></li>
+      <li><a href="map.html">每日地图</a></li>
+      <li><a href="signup.html">报名</a></li>
+      <li><a href="query.html" style="color:var(--cyan)">查结果</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="wrap">
+  <span class="kicker"><i style="width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)"></i>CHECK · 凭报名码查结果</span>
+  <h1>查<span>审核结果</span></h1>
+  <p class="lead">
+    提交报名后会得到一串<b style="color:var(--text)">报名码</b>（6 位字母数字）。
+    输入它就能看到自己<b style="color:var(--text)">审核中 / 已通过 / 已拒签</b>。
+  </p>
+
+  <div class="card">
+    <div class="field">
+      <label>报名码</label>
+      <input type="text" id="code" maxlength="8" placeholder="例：7KM3QP" autocomplete="off"
+             autocapitalize="characters" spellcheck="false">
+    </div>
+    <button class="submit" type="button" id="btn">查询审核结果</button>
+    <div class="msg" id="msg"></div>
+    <p class="tips">
+      报名码在报名成功页，也会发到你留的联系方式。<br>
+      找不到报名码？点 <a href="signup.html">回到报名页</a> 或联系组委会。
+    </p>
+  </div>
+
+  <p class="card foot">TLSTUDIO × TLDOUBLERSTUDIO 主办 · 结果以组委会通知为准</p>
+</div>
+
+<script>
+// ★ 基准必须是站点根：下面拼的是 "/latiao/query"。
+//   写成 ".../latiao" 会拼成 /latiao/latiao/query（404），查询永远失败。
+const API_BASE = "https://api.tlstudio.cn";
+const QUERY = API_BASE + "/latiao/query";
+const $ = id => document.getElementById(id);
+
+const fmtTime = function(ts){
+  if(!ts) return "";
+  const d = new Date(ts), p = function(n){ return String(n).padStart(2,"0"); };
+  return d.getFullYear() + "-" + p(d.getMonth()+1) + "-" + p(d.getDate())
+       + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+};
+
+async function query(){
+  const input = $("code");
+  const code = (input.value || "").trim().toUpperCase();
+  const msg = $("msg"), btn = $("btn");
+  if(!code){ show("err", "请先输入报名码", "报名码是 6 位字母数字，提交报名后会给到。"); return; }
+  msg.className = "msg";
+  msg.textContent = "正在查询…";
+  btn.disabled = true; btn.textContent = "查询中…";
+  try{
+    const r = await fetch(QUERY + "?code=" + encodeURIComponent(code), { cache: "no-store" });
+    const j = await r.json();
+    if(!j.ok){ show("err", "查询失败", "服务暂时不可用，稍后再试，或直接联系组委会。"); return; }
+    if(!j.found){
+      show("err", "查不到这个报名码",
+        "请核对是不是看漏了字符（报名码不区分大小写、不含 0/1/I/O）。\n" +
+        "确认无误仍查不到，请先重新提交报名拿到新码，或联系组委会核实。");
+      return;
+    }
+    localStorage.setItem("lt_code", code);   // 记住这次查的码，下次自动带出来
+    const team = j.team || "";
+    const who = team ? "队伍「" + team + "」" : "你的报名";
+    const when = fmtTime(j.ts) ? "（提交于 " + fmtTime(j.ts) + "）" : "";
+    if(j.st === "ok"){
+      show("ok", "审核通过 ✔",
+        who + "已通过审核" + when + "。开赛时间、场地与分组将另行通知，请留意你留的联系方式。");
+    }else if(j.st === "rej"){
+      show("err", "未通过审核",
+        (j.note ? j.note + "。" : "组委会审核后未通过本次报名。") +
+        who + "未通过。想参加可以核对资料后重新提交报名，报名码会更新。");
+    }else{
+      show("wait", "审核中",
+        who + "已提交，组委会正在核对" + when + "。\n" +
+        "审核结果出来后本页会显示，也可以留意组委会通知。");
+    }
+  }catch(e){
+    show("err", "网络异常", "暂时连不上服务器，请稍后重试，或联系组委会。");
+  }finally{
+    btn.disabled = false; btn.textContent = "查询审核结果";
+  }
+}
+
+function show(kind, title, note){
+  const msg = $("msg");
+  msg.className = "msg on " + kind;
+  msg.innerHTML = "";
+  const b = document.createElement("b");
+  b.textContent = title;
+  msg.appendChild(b);
+  const s = document.createElement("span");
+  s.textContent = note;
+  s.style.whiteSpace = "pre-line";
+  msg.appendChild(s);
+}
+
+// 回车即查
+$("code").addEventListener("keydown", function(e){
+  if(e.key === "Enter") query();
+});
+$("btn").addEventListener("click", query);
+
+// 本机存过报名码就自动填进去（帮家人代查时改一下即可）
+(function(){
+  try{
+    const saved = localStorage.getItem("lt_code");
+    if(saved && !$("code").value) $("code").value = saved.trim().toUpperCase();
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
