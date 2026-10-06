@@ -96,15 +96,15 @@ input[type=text]:focus{border-color:var(--cyan)}
   <span class="kicker"><i style="width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)"></i>CHECK · 凭报名码查结果</span>
   <h1>查<span>审核结果</span></h1>
   <p class="lead">
-    提交报名后会得到一串<b style="color:var(--text)">报名码</b>（6 位字母数字）。
+    提交报名后会得到一串<b style="color:var(--text)">报名码</b>（6 位数字）。
     输入它就能看到自己<b style="color:var(--text)">审核中 / 已通过 / 已拒签</b>。
   </p>
 
   <div class="card">
     <div class="field">
       <label>报名码</label>
-      <input type="text" id="code" maxlength="8" placeholder="例：7KM3QP" autocomplete="off"
-             autocapitalize="characters" spellcheck="false">
+      <input type="text" id="code" maxlength="8" placeholder="例：483920" autocomplete="off"
+             inputmode="numeric" spellcheck="false">
     </div>
     <button class="submit" type="button" id="btn">查询审核结果</button>
     <div class="msg" id="msg"></div>
@@ -135,7 +135,7 @@ async function query(){
   const input = $("code");
   const code = (input.value || "").trim().toUpperCase();
   const msg = $("msg"), btn = $("btn");
-  if(!code){ show("err", "请先输入报名码", "报名码是 6 位字母数字，提交报名后会给到。"); return; }
+  if(!code){ show("err", "请先输入报名码", "报名码是 6 位数字，提交报名后会给到。"); return; }
   msg.className = "msg";
   msg.textContent = "正在查询…";
   btn.disabled = true; btn.textContent = "查询中…";
@@ -145,7 +145,7 @@ async function query(){
     if(!j.ok){ show("err", "查询失败", "服务暂时不可用，稍后再试，或直接联系组委会。"); return; }
     if(!j.found){
       show("err", "查不到这个报名码",
-        "请核对是不是看漏了字符（报名码不区分大小写、不含 0/1/I/O）。\n" +
+        "报名码是 6 位数字、不会以 0 开头，请核对有没有少输一位。\n" +
         "确认无误仍查不到，请先重新提交报名拿到新码，或联系组委会核实。");
       return;
     }
