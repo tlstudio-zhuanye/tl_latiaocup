@@ -177,7 +177,7 @@ textarea{resize:vertical;min-height:74px}
       <div class="codecard" id="codecard">
         <div class="cc-label">★ 你的报名码</div>
         <div class="cc-code" id="cccode">------</div>
-        <div class="cc-sub">截图保存这串码，以后查审核结果就靠它</div>
+        <div class="cc-sub">6 位数字，截图保存，以后查审核结果就靠它</div>
         <div class="cc-acts">
           <button type="button" class="cc-btn" id="copybtn">复制报名码</button>
           <a class="cc-btn" href="query.html" target="_blank" rel="noopener">查审核结果</a>
@@ -187,7 +187,7 @@ textarea{resize:vertical;min-height:74px}
       </div>
       <p class="tips">
         提交即视为同意：报名信息仅用于本届赛事组织与通知，不作他用。<br>
-        <b>填错也不用担心</b>——重新提交一次即可，组委会以最新一条为准，报名码也会换新。
+        <b>填错也不用担心</b>——改了直接再提交一次即可，会覆盖你原来那条，报名码不变。
       </p>
     </form>
   </div>
@@ -256,8 +256,14 @@ async function checkStatus(){
 }
 checkStatus();
 
+// ★ 防连点：按钮 disabled 只在「重绘前」挡得住，回车键 / 手抖双击仍可能再进来一次，
+//   所以再加一道变量闸。服务端也有防重复提交，这里只是别让用户白等两次。
+var submitting = false;
+
 async function doSubmit(ev){
   ev.preventDefault();
+  if(submitting) return false;
+  submitting = true;
   const fd = new FormData(ev.target);
   const data = Object.fromEntries(fd.entries());
   const btn = $("btn"), msg = $("msg");
@@ -273,7 +279,13 @@ async function doSubmit(ev){
     if(j.ok){
       const code = j.code || "";
       msg.className = "msg ok";
-      msg.textContent = "✔ 报名成功！队伍「" + (data.team||"") + "」已登记，开赛安排将另行通知。";
+      if(j.dup){
+        msg.textContent = "✔ " + (j.msg || "这条报名你刚刚已经提交过了，报名码还是原来那串。");
+      }else if(j.updated){
+        msg.textContent = "✔ " + (j.msg || "已更新你原来的那条报名（报名码不变）。");
+      }else{
+        msg.textContent = "✔ 报名成功！队伍「" + (data.team||"") + "」已登记，开赛安排将另行通知。";
+      }
       btn.textContent = "已提交";
       ev.target.querySelectorAll("input,textarea").forEach(el=>el.disabled=true);
       if(code){
@@ -289,11 +301,13 @@ async function doSubmit(ev){
       msg.className = "msg err";
       msg.textContent = "✖ " + (j.error || "提交失败，请稍后重试");
       btn.disabled = false; btn.textContent = "提交报名";
+      submitting = false;          // 失败了要放开闸，不然用户改完也没法重提
     }
   }catch(e){
     msg.className = "msg err";
     msg.textContent = "✖ 网络异常：请检查网络后重试，或直接联系组委会";
     btn.disabled = false; btn.textContent = "提交报名";
+    submitting = false;
   }
   return false;
 }
