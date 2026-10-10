@@ -47,6 +47,7 @@ h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text
 .b-ok{background:rgba(34,197,94,.14);color:#7ee2a8;border:1px solid rgba(34,197,94,.4)}
 .b-rej{background:rgba(239,68,68,.12);color:#ff9b9b;border:1px solid rgba(239,68,68,.4)}
 .b-pend{background:rgba(245,158,11,.12);color:#fcd34d;border:1px solid rgba(245,158,11,.4)}
+.b-out{background:rgba(167,139,250,.14);color:#c9b8ff;border:1px solid rgba(167,139,250,.45)}
 .codebox{display:flex;align-items:center;justify-content:space-between;gap:12px;
   background:var(--bg-2);border:1px dashed var(--line-2);border-radius:12px;
   padding:14px 18px;margin:12px 0 18px}
@@ -67,6 +68,12 @@ input:focus,textarea:focus,select:focus{border-color:var(--cyan)}
 .save{width:100%;padding:12px;border:none;border-radius:11px;background:var(--grad);
   color:#06121a;font-size:15px;font-weight:800;cursor:pointer}
 .save:disabled{opacity:.6;cursor:not-allowed}
+.quit{width:100%;margin-top:10px;padding:11px;border:1px solid rgba(239,68,68,.45);
+  border-radius:11px;background:rgba(239,68,68,.08);color:#ff9b9b;font-size:14px;
+  font-weight:800;cursor:pointer}
+.quit:hover{background:rgba(239,68,68,.16)}
+.rejoin{width:100%;padding:12px;border:1px solid rgba(56,225,255,.45);border-radius:11px;
+  background:rgba(56,225,255,.08);color:#bfeaf8;font-size:15px;font-weight:800;cursor:pointer}
 .tip{color:var(--dim);font-size:12.5px;margin-top:10px;line-height:1.8}
 .tip a{color:var(--cyan);text-decoration:underline}
 .note{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);
@@ -142,6 +149,7 @@ function fmt(ts){
 function badge(st){
   if(st === "ok") return '<span class="badge b-ok">已通过</span>';
   if(st === "rej") return '<span class="badge b-rej">未通过</span>';
+  if(st === "out") return '<span class="badge b-out">已退出</span>';
   return '<span class="badge b-pend">审核中</span>';
 }
 
@@ -163,11 +171,21 @@ function cardHtml(it){
       '。改好资料重新提交一次就能再申请。</div>' : "";
   const ok = it.st === "ok"
     ? '<div class="note ok">已通过审核' + (it.approveNote ? "（" + esc(it.approveNote) + "）" : "") + '。</div>' : "";
+  const out = it.st === "out"
+    ? '<div class="note" style="background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.35);color:#c9b8ff">' +
+      '已退出比赛' + (it.outAt ? "（" + fmt(it.outAt) + "）" : "") +
+      (it.outNote ? "：" + esc(it.outNote) : "") + '。<br>退出后组委会不会再把你排进赛程；' +
+      '后悔了随时可以撤销退出，原来的审核结果会恢复。</div>' : "";
+  // 退出后不给改资料（改了也不作数），只留「撤销退出」
+  const acts = it.st === "out"
+    ? '<button class="rejoin" onclick="unquit(this)">撤销退出，重新参赛</button>'
+    : '<button class="save" onclick="save(this)">保存修改</button>' +
+      '<button class="quit" onclick="quit(this)">退出比赛</button>';
   return '' +
   '<div class="card" data-id="' + esc(it.id) + '">' +
     '<h2>' + esc(it.team || "（未填队伍名）") + ' ' + badge(it.st) + '</h2>' +
     '<div class="sub">提交于 ' + fmt(it.ts) + ' · 编号 ' + esc(it.id) + '</div>' +
-    rej + ok +
+    rej + ok + out +
     '<div class="codebox">' +
       '<div><div class="lbl">你的报名码</div><div class="v">' + esc(it.code || "——") + '</div></div>' +
       '<button class="mini" onclick="copyCode(this)">复制</button>' +
@@ -182,7 +200,7 @@ function cardHtml(it){
       '</select></div>' +
       '<div class="f full"><label>备注</label><textarea class="e" data-k="note" maxlength="200">' + esc(it.note) + '</textarea></div>' +
     '</div>' +
-    '<button class="save" onclick="save(this)">保存修改</button>' +
+    acts +
     '<div class="tip">队伍名和手机号要改的话找组委会（19127101909）—— 这两项是判定「是不是同一个人重复报名」的依据，开放改会乱。</div>' +
   '</div>';
 }
@@ -225,6 +243,36 @@ async function save(btn){
   }
 }
 
+// 退出比赛：打标记，不删除（组委会要看得见谁退了）。可撤销。
+async function quit(btn){
+  const card = btn.closest(".card");
+  const id = card.getAttribute("data-id");
+  const team = (card.querySelector("h2") || {}).textContent || "这支队伍";
+  if(!confirm("确定退出比赛？\n\n" + team.trim() +
+      "\n退出后组委会不会再把你排进赛程，报名码仍然有效、可以查到「已退出」。\n" +
+      "误点没关系 —— 在「我的报名」里点「撤销退出」就能恢复。")) return;
+  let why = "";
+  try{ why = (prompt("退出原因（选填，组委会能看到）", "") || "").slice(0, 100); }catch(e){ why = ""; }
+  btn.disabled = true; btn.textContent = "处理中…";
+  const {status, j} = await api("/me/quit", {token: token(), id: id, note: why, on: 1});
+  btn.disabled = false; btn.textContent = "退出比赛";
+  if(j.ok){ msg("ok", "已退出比赛。后悔了点下面的「撤销退出」就能回来。"); await load(); }
+  else if(status === 401){ msg("err", "登录已过期，请重新登录。"); }
+  else{ msg("err", j.error || "操作失败，稍后再试。"); }
+}
+
+async function unquit(btn){
+  const card = btn.closest(".card");
+  const id = card.getAttribute("data-id");
+  if(!confirm("撤销退出，重新参加比赛？\n\n原来「已通过」的话会直接恢复到已通过，不用重新审核。")) return;
+  btn.disabled = true; btn.textContent = "处理中…";
+  const {status, j} = await api("/me/quit", {token: token(), id: id, on: 0});
+  btn.disabled = false; btn.textContent = "撤销退出，重新参赛";
+  if(j.ok){ msg("ok", "已撤销退出，重新回到参赛名单。"); await load(); }
+  else if(status === 401){ msg("err", "登录已过期，请重新登录。"); }
+  else{ msg("err", j.error || "操作失败，稍后再试。"); }
+}
+
 function copyCode(btn){
   const v = btn.parentNode.querySelector(".v").textContent.trim();
   const done = function(){ btn.textContent = "已复制"; setTimeout(function(){ btn.textContent = "复制"; }, 1600); };
@@ -240,6 +288,7 @@ $("logout").addEventListener("click", async function(){
   location.href = "login.html";
 });
 window.save = save; window.copyCode = copyCode;
+window.quit = quit; window.unquit = unquit;
 
 if(!token()){
   $("who").textContent = "未登录";
