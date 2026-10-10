@@ -98,7 +98,7 @@ input[type=text]:focus{border-color:var(--cyan)}
   <h1>查<span>审核结果</span></h1>
   <p class="lead">
     提交报名后会得到一串<b style="color:var(--text)">报名码</b>（6 位数字）。
-    输入它就能看到自己<b style="color:var(--text)">审核中 / 已通过 / 已拒签</b>。
+    输入它就能看到自己<b style="color:var(--text)">审核中 / 已通过 / 未通过 / 已退出</b>。
   </p>
 
   <div class="card">
@@ -157,6 +157,11 @@ async function query(){
     if(j.st === "ok"){
       show("ok", "审核通过 ✔",
         who + "已通过审核" + when + "。开赛时间、场地与分组将另行通知，请留意你留的联系方式。");
+    }else if(j.st === "out"){
+      show("err", "已退出比赛",
+        who + "已退出本次比赛" + when + "。\n" +
+        "如果是误操作，用手机号 + 报名码登录「我的报名」点「撤销退出」就能恢复。\n" +
+        "有任何问题联系组委会（19127101909）。");
     }else if(j.st === "rej"){
       show("err", "未通过审核",
         (j.note ? j.note + "。" : "组委会审核后未通过本次报名。") +
