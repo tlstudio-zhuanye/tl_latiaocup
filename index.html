@@ -239,6 +239,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 34px;background:var(--bg-
       <li><a href="#score">计分</a></li>
       <li><a href="#download">下载</a></li>
       <li><a href="map.html">每日地图</a></li>
+      <li><a href="query.html">查结果</a></li>
       <li><a href="signup.html" style="color:var(--cyan);font-weight:700">报名 →</a></li>
     </ul>
   </div>
@@ -256,6 +257,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 34px;background:var(--bg-
     </p>
     <div class="hero-cta">
       <a class="btn btn-solid" href="signup.html">✍ 立即报名参赛</a>
+      <a class="btn btn-line" href="query.html">🔎 已报名？查审核结果（凭 6 位报名码）</a>
       <a class="btn btn-line" href="#download">⬇ 下载资源包（GitHub）</a>
       <a class="btn btn-line" href="#tasks">查看四大任务</a>
       <a class="btn btn-line" href="map.html">🗺️ 今日地图（在线看）</a>
@@ -520,6 +522,11 @@ footer{border-top:1px solid var(--line);padding:44px 0 34px;background:var(--bg-
       <div class="f-contact">
         联系：19127101909　|　谭钟睿（广西南宁）<br>
         器材平台：鲸鱼机器人（WhalesBot）
+        <div style="margin-top:10px">
+          <a href="signup.html" style="color:var(--cyan)">报名参赛</a> ·
+          <a href="query.html" style="color:var(--cyan)">查审核结果（凭报名码）</a> ·
+          <a href="map.html" style="color:var(--cyan)">每日地图</a>
+        </div>
       </div>
     </div>
     <p class="copy">© 2026 TLSTUDIO × TLDOUBLERSTUDIO　|　2026—2027 辣条杯「天外来物」主题赛　|　本规则解释权归辣条杯组委会</p>
@@ -534,13 +541,18 @@ const io = new IntersectionObserver(es=>{
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 
 // 导航高亮
+// ★ 外部链接（map.html / signup.html / query.html）没有对应的锚点区块，
+//   以前用 .filter(Boolean) 把它们剔掉，结果 secs 和 links 索引错位，
+//   高亮会跑到错误的导航项上 —— 而且外部入口越多，偏得越远。
+//   改成「链接 + 区块」成对存，索引永远对齐。
 const links=[...document.querySelectorAll('.nav ul a')];
-const secs=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+const pairs=links.map(a=>[a, document.querySelector(a.getAttribute('href'))]).filter(p=>p[1]);
 window.addEventListener('scroll',()=>{
   const y=window.scrollY+140;
-  let cur=0;
-  secs.forEach((s,i)=>{ if(s && s.offsetTop<=y) cur=i; });
-  links.forEach((a,i)=>a.classList.toggle('on',i===cur));
+  let cur=-1;
+  pairs.forEach((p,i)=>{ if(p[1].offsetTop<=y) cur=i; });
+  links.forEach(a=>a.classList.remove('on'));
+  if(cur>=0) pairs[cur][0].classList.add('on');
 },{passive:true});
 </script>
 </body>
