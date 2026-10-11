@@ -120,6 +120,12 @@ input:focus,textarea:focus,select:focus{border-color:var(--cyan)}
     </div>
     <div class="msg" id="msg"></div>
     <div id="list"></div>
+    <div class="card" id="closeBox" style="border-color:rgba(239,68,68,.35)">
+      <h2 style="color:#ff9b9b">注销账号</h2>
+      <div class="sub">把你这个手机号名下的<b>全部</b>报名一起删除（手机号、选手、教练等资料全部清除）并退出登录。<br>
+        <b>不可恢复</b> —— 只是某一支队伍不参加的话，用卡片里的「退出比赛」就够了。</div>
+      <button class="quit" onclick="delAccount()">注销账号并清空我的报名数据</button>
+    </div>
   </div>
   <p class="card foot">TLSTUDIO × TLDOUBLERSTUDIO 主办 · 结果以组委会通知为准</p>
 </div>
@@ -255,6 +261,21 @@ async function quit(btn){
   else{ msg("err", j.error || "操作失败，稍后再试。"); btn.disabled = false; btn.textContent = "退出比赛"; }
 }
 
+// 注销账号：这个手机号名下的全部报名一起清掉 + 会话失效。不可恢复。
+async function delAccount(){
+  if(!confirm("注销账号？这一步不能反悔。\n\n将删除你手机号名下的全部报名：\n" +
+      "· 手机号、选手、教练等资料全部清除\n· 退出登录，想再看要重新用报名码登录\n" +
+      "· 想再参加只能重新报名（会拿到新的报名码）\n\n" +
+      "只是某一支队伍不参加的话，用卡片里的「退出比赛」，别注销。")) return;
+  if(!confirm("最后确认一次：注销后无法恢复，确定注销？")) return;
+  const {status, j} = await api("/me/delete", {token: token()});
+  if(j.ok){
+    try{ localStorage.removeItem("lt_token"); localStorage.removeItem("lt_contact"); }catch(e){}
+    location.href = "index.html";
+  }else if(status === 401){ msg("err", "登录已过期，请重新登录。"); }
+  else{ msg("err", j.error || "操作失败，稍后再试。"); }
+}
+
 function copyCode(btn){
   const v = btn.parentNode.querySelector(".v").textContent.trim();
   const done = function(){ btn.textContent = "已复制"; setTimeout(function(){ btn.textContent = "复制"; }, 1600); };
@@ -270,11 +291,12 @@ $("logout").addEventListener("click", async function(){
   location.href = "login.html";
 });
 window.save = save; window.copyCode = copyCode;
-window.quit = quit;
+window.quit = quit; window.delAccount = delAccount;
 
 if(!token()){
   $("who").textContent = "未登录";
   $("list").innerHTML = '<div class="card">还没登录。<br><a href="login.html" style="color:var(--cyan)">用手机号 + 报名码登录 →</a></div>';
+  $("closeBox").style.display = "none";     // 没登录谈不上注销
 }else{
   load();
 }
