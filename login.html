@@ -94,16 +94,17 @@ input[type=text]:focus,input[type=tel]:focus{border-color:var(--cyan)}
   <span class="kicker"><i style="width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)"></i>SIGN IN · 我的报名</span>
   <h1>登录<span>我的报名</span></h1>
   <p class="lead">
-    用报名时留的<b style="color:var(--text)">手机号</b>加上发给你的
-    <b style="color:var(--text)">6 位报名码</b>登录。不用设密码，也不会发短信。
+    用报名时留的<b style="color:var(--text)">联系方式</b>（手机号 / 微信号 / 邮箱都行）
+    加上发给你的<b style="color:var(--text)">6 位报名码</b>登录。不用设密码，也不会发短信。
   </p>
 
   <div class="card">
     <form id="f">
       <div class="field">
-        <label>报名时留的手机号</label>
-        <input type="tel" id="contact" class="tel" maxlength="20" inputmode="numeric"
-               autocomplete="tel" placeholder="例：13800138000">
+        <label>报名时留的联系方式</label>
+        <input type="text" id="contact" class="tel" maxlength="40"
+               autocomplete="off" spellcheck="false" placeholder="手机号 / 微信号 / 邮箱">
+        <div class="sub" style="margin-top:6px">要和报名表上填的完全一致（不区分大小写，空格无所谓）。</div>
       </div>
       <div class="field">
         <label>6 位报名码</label>
