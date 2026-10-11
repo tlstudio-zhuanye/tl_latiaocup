@@ -135,10 +135,6 @@ textarea{resize:vertical;min-height:74px}
   </p>
 
   <div class="card">
-    <div class="msg st" id="stbar">
-      <b id="sttitle">审核中</b>
-      <span id="stnote"></span>
-    </div>
     <form id="fm" onsubmit="return doSubmit(event)">
       <div class="fgrid">
         <div class="field full">
@@ -202,61 +198,9 @@ const API = "https://api.tlstudio.cn/latiao/signup";
 const API_BASE = "https://api.tlstudio.cn";
 const $ = id => document.getElementById(id);
 
-// ---------- 审核自查：本机存过报名码 → 打开页面就显示「审核中 / 已通过 / 已拒签」 ----------
-function myCode(){
-  try{
-    const raw = localStorage.getItem("lt_signup");
-    if(raw){ try{
-      const d = JSON.parse(raw);
-      if(d && d.code) return { code: String(d.code).trim().toUpperCase(), team: d.team || "" };
-    }catch(e){}
-    // 老数据：没存 code 但存过手机号 → 退回按手机号查（/latiao/status 仍兼容）
-    if(raw){ const d = JSON.parse(raw); if(d && d.contact) return { contact: d.contact }; }
-    }
-  }catch(e){}
-  return null;
-}
+// ★ 报名页不再自查/展示审核状态（组委会要求）：报名提交完只给报名码，
+//   审核结果一律去「查结果」页凭报名码看，或登录「我的报名」看。
 
-function showStatus(cls, title, note){
-  const bar = $("stbar");
-  bar.className = "msg st on " + cls;
-  $("sttitle").textContent = title;
-  $("stnote").textContent = note || "";
-}
-
-async function checkStatus(){
-  const me = myCode();
-  if(!me) return;
-  try{
-    let j;
-    if(me.code){
-      // 主路径：报名码直查（查询页也是同一条接口）
-      const r = await fetch(API_BASE + "/latiao/query?code=" + encodeURIComponent(me.code),
-                            { cache: "no-store" });
-      j = await r.json();
-    }else{
-      const q = new URLSearchParams({ contact: me.contact || "" });
-      const r = await fetch(API_BASE + "/latiao/status?" + q.toString(), { cache: "no-store" });
-      j = await r.json();
-      j.st = j.rejected ? "rej" : "pending";
-    }
-    if(!j.found && !j.rejected){ showStatus("st-pending", "审核中", "组委会正在核对报名资料，通过后会在这里显示结果，也可以直接用报名码到查结果页查看。"); return; }
-    if(j.st === "rej"){
-      showStatus("st-rej", "您已被拒签，请尝试再次申请",
-        (j.note ? j.note + "。" : "组委会审核后未通过本次报名。") +
-        "重新填写并提交一次即可恢复报名（报名码会更新）。");
-    }else if(j.st === "ok"){
-      showStatus("st-ok", "审核通过 ✔",
-        "队伍「" + (j.team || me.team || "你的报名") + "」已通过审核，开赛安排将另行通知。");
-    }else{
-      showStatus("st-pending", "审核中",
-        "队伍「" + (j.team || me.team || "你的报名") + "」已提交，组委会正在核对，请稍后回来查看。");
-    }
-  }catch(e){
-    showStatus("st-pending", "审核中", "暂时查不到结果（网络问题），稍后刷新本页或到查结果页用报名码查询。");
-  }
-}
-checkStatus();
 
 // ★ 防连点：按钮 disabled 只在「重绘前」挡得住，回车键 / 手抖双击仍可能再进来一次，
 //   所以再加一道变量闸。服务端也有防重复提交，这里只是别让用户白等两次。
@@ -296,8 +240,6 @@ async function doSubmit(ev){
         data.code = code;
         try{ localStorage.setItem("lt_signup", JSON.stringify(data)); }catch(e){}
         localStorage.setItem("lt_code", code);   // 报名码单独存一份，便于以后直接查
-        showStatus("st-pending", "审核中",
-          "队伍「" + (data.team||"") + "」已提交，组委会正在核对，通过后会在这里显示结果。");
       }
     }else{
       msg.className = "msg err";
