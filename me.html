@@ -122,7 +122,7 @@ input:focus,textarea:focus,select:focus{border-color:var(--cyan)}
     <div id="list"></div>
     <div class="card" id="closeBox" style="border-color:rgba(239,68,68,.35)">
       <h2 style="color:#ff9b9b">注销账号</h2>
-      <div class="sub">把你这个手机号名下的<b>全部</b>报名一起删除（手机号、选手、教练等资料全部清除）并退出登录。<br>
+      <div class="sub">把你这个联系方式名下的<b>全部</b>报名一起删除（联系方式、选手、教练等资料全部清除）并退出登录。<br>
         <b>不可恢复</b> —— 只是某一支队伍不参加的话，用卡片里的「退出比赛」就够了。</div>
       <button class="quit" onclick="delAccount()">注销账号并清空我的报名数据</button>
     </div>
@@ -199,7 +199,7 @@ function cardHtml(it){
       '<div class="f full"><label>备注</label><textarea class="e" data-k="note" maxlength="200">' + esc(it.note) + '</textarea></div>' +
     '</div>' +
     acts +
-    '<div class="tip">队伍名和手机号要改的话找组委会—— 这两项是判定「是不是同一个人重复报名」的依据，开放改会乱。</div>' +
+    '<div class="tip">队伍名和联系方式要改的话找组委会—— 这两项是判定「是不是同一个人重复报名」的依据，开放改会乱。</div>' +
   '</div>';
 }
 
@@ -219,9 +219,9 @@ async function load(){
     return;
   }
   msg("");
-  $("who").textContent = "手机号 " + (j.contact || "") + " · 共 " + (j.count || 0) + " 条报名";
+  $("who").textContent = "联系方式 " + (j.contact || "") + " · 共 " + (j.count || 0) + " 条报名";
   $("list").innerHTML = (j.items || []).map(cardHtml).join("") ||
-    '<div class="card">这个手机号名下还没有报名。<br><a href="signup.html" style="color:var(--cyan)">去报名 →</a></div>';
+    '<div class="card">这个联系方式名下还没有报名。<br><a href="signup.html" style="color:var(--cyan)">去报名 →</a></div>';
 }
 
 async function save(btn){
@@ -248,7 +248,7 @@ async function quit(btn){
   const id = card.getAttribute("data-id");
   const team = (card.querySelector("h2") || {}).textContent || "这支队伍";
   if(!confirm("确定退出比赛？这一步不能反悔。\n\n队伍：" + team.trim() +
-      "\n退出后：\n· 这条报名的手机号、选手、教练等资料会全部清除\n" +
+      "\n退出后：\n· 这条报名的联系方式、选手、教练等资料会全部清除\n" +
       "· 不能再恢复，想参加只能重新报名（会拿到新的报名码）\n" +
       "· 原来的报名码还能查到「已退出比赛」\n\n确定要退出吗？")) return;
   if(!confirm("最后确认一次：退出后无法恢复，确定退出？")) return;
@@ -263,8 +263,8 @@ async function quit(btn){
 
 // 注销账号：这个手机号名下的全部报名一起清掉 + 会话失效。不可恢复。
 async function delAccount(){
-  if(!confirm("注销账号？这一步不能反悔。\n\n将删除你手机号名下的全部报名：\n" +
-      "· 手机号、选手、教练等资料全部清除\n· 退出登录，想再看要重新用报名码登录\n" +
+  if(!confirm("注销账号？这一步不能反悔。\n\n将删除你这个联系方式名下的全部报名：\n" +
+      "· 联系方式、选手、教练等资料全部清除\n· 退出登录，想再看要重新用报名码登录\n" +
       "· 想再参加只能重新报名（会拿到新的报名码）\n\n" +
       "只是某一支队伍不参加的话，用卡片里的「退出比赛」，别注销。")) return;
   if(!confirm("最后确认一次：注销后无法恢复，确定注销？")) return;
@@ -295,7 +295,7 @@ window.quit = quit; window.delAccount = delAccount;
 
 if(!token()){
   $("who").textContent = "未登录";
-  $("list").innerHTML = '<div class="card">还没登录。<br><a href="login.html" style="color:var(--cyan)">用手机号 + 报名码登录 →</a></div>';
+  $("list").innerHTML = '<div class="card">还没登录。<br><a href="login.html" style="color:var(--cyan)">用联系方式 + 报名码登录 →</a></div>';
   $("closeBox").style.display = "none";     // 没登录谈不上注销
 }else{
   load();
