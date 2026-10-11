@@ -171,21 +171,13 @@ function cardHtml(it){
       '。改好资料重新提交一次就能再申请。</div>' : "";
   const ok = it.st === "ok"
     ? '<div class="note ok">已通过审核' + (it.approveNote ? "（" + esc(it.approveNote) + "）" : "") + '。</div>' : "";
-  const out = it.st === "out"
-    ? '<div class="note" style="background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.35);color:#c9b8ff">' +
-      '已退出比赛' + (it.outAt ? "（" + fmt(it.outAt) + "）" : "") +
-      (it.outNote ? "：" + esc(it.outNote) : "") + '。<br>退出后组委会不会再把你排进赛程；' +
-      '后悔了随时可以撤销退出，原来的审核结果会恢复。</div>' : "";
-  // 退出后不给改资料（改了也不作数），只留「撤销退出」
-  const acts = it.st === "out"
-    ? '<button class="rejoin" onclick="unquit(this)">撤销退出，重新参赛</button>'
-    : '<button class="save" onclick="save(this)">保存修改</button>' +
-      '<button class="quit" onclick="quit(this)">退出比赛</button>';
+  const acts = '<button class="save" onclick="save(this)">保存修改</button>' +
+               '<button class="quit" onclick="quit(this)">退出比赛</button>';
   return '' +
   '<div class="card" data-id="' + esc(it.id) + '">' +
     '<h2>' + esc(it.team || "（未填队伍名）") + ' ' + badge(it.st) + '</h2>' +
     '<div class="sub">提交于 ' + fmt(it.ts) + ' · 编号 ' + esc(it.id) + '</div>' +
-    rej + ok + out +
+    rej + ok +
     '<div class="codebox">' +
       '<div><div class="lbl">你的报名码</div><div class="v">' + esc(it.code || "——") + '</div></div>' +
       '<button class="mini" onclick="copyCode(this)">复制</button>' +
@@ -201,7 +193,7 @@ function cardHtml(it){
       '<div class="f full"><label>备注</label><textarea class="e" data-k="note" maxlength="200">' + esc(it.note) + '</textarea></div>' +
     '</div>' +
     acts +
-    '<div class="tip">队伍名和手机号要改的话找组委会（19127101909）—— 这两项是判定「是不是同一个人重复报名」的依据，开放改会乱。</div>' +
+    '<div class="tip">队伍名和手机号要改的话找组委会—— 这两项是判定「是不是同一个人重复报名」的依据，开放改会乱。</div>' +
   '</div>';
 }
 
@@ -243,34 +235,24 @@ async function save(btn){
   }
 }
 
-// 退出比赛：打标记，不删除（组委会要看得见谁退了）。可撤销。
+// ★ 退出比赛 = 终局操作：**不可撤销**，整条报名的资料一起清掉。
+//   所以确认框必须把后果说死，不能让用户以为还能反悔。
 async function quit(btn){
   const card = btn.closest(".card");
   const id = card.getAttribute("data-id");
   const team = (card.querySelector("h2") || {}).textContent || "这支队伍";
-  if(!confirm("确定退出比赛？\n\n" + team.trim() +
-      "\n退出后组委会不会再把你排进赛程，报名码仍然有效、可以查到「已退出」。\n" +
-      "误点没关系 —— 在「我的报名」里点「撤销退出」就能恢复。")) return;
+  if(!confirm("确定退出比赛？这一步不能反悔。\n\n队伍：" + team.trim() +
+      "\n退出后：\n· 这条报名的手机号、选手、教练等资料会全部清除\n" +
+      "· 不能再恢复，想参加只能重新报名（会拿到新的报名码）\n" +
+      "· 原来的报名码还能查到「已退出比赛」\n\n确定要退出吗？")) return;
+  if(!confirm("最后确认一次：退出后无法恢复，确定退出？")) return;
   let why = "";
-  try{ why = (prompt("退出原因（选填，组委会能看到）", "") || "").slice(0, 100); }catch(e){ why = ""; }
+  try{ why = (prompt("退出原因（选填）", "") || "").slice(0, 100); }catch(e){ why = ""; }
   btn.disabled = true; btn.textContent = "处理中…";
-  const {status, j} = await api("/me/quit", {token: token(), id: id, note: why, on: 1});
-  btn.disabled = false; btn.textContent = "退出比赛";
-  if(j.ok){ msg("ok", "已退出比赛。后悔了点下面的「撤销退出」就能回来。"); await load(); }
-  else if(status === 401){ msg("err", "登录已过期，请重新登录。"); }
-  else{ msg("err", j.error || "操作失败，稍后再试。"); }
-}
-
-async function unquit(btn){
-  const card = btn.closest(".card");
-  const id = card.getAttribute("data-id");
-  if(!confirm("撤销退出，重新参加比赛？\n\n原来「已通过」的话会直接恢复到已通过，不用重新审核。")) return;
-  btn.disabled = true; btn.textContent = "处理中…";
-  const {status, j} = await api("/me/quit", {token: token(), id: id, on: 0});
-  btn.disabled = false; btn.textContent = "撤销退出，重新参赛";
-  if(j.ok){ msg("ok", "已撤销退出，重新回到参赛名单。"); await load(); }
-  else if(status === 401){ msg("err", "登录已过期，请重新登录。"); }
-  else{ msg("err", j.error || "操作失败，稍后再试。"); }
+  const {status, j} = await api("/me/quit", {token: token(), id: id, note: why});
+  if(j.ok){ msg("ok", "已退出比赛，报名信息已清除。想再参加请重新报名。"); await load(); }
+  else if(status === 401){ msg("err", "登录已过期，请重新登录。"); btn.disabled = false; btn.textContent = "退出比赛"; }
+  else{ msg("err", j.error || "操作失败，稍后再试。"); btn.disabled = false; btn.textContent = "退出比赛"; }
 }
 
 function copyCode(btn){
@@ -288,7 +270,7 @@ $("logout").addEventListener("click", async function(){
   location.href = "login.html";
 });
 window.save = save; window.copyCode = copyCode;
-window.quit = quit; window.unquit = unquit;
+window.quit = quit;
 
 if(!token()){
   $("who").textContent = "未登录";
