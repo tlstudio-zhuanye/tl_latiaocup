@@ -13,62 +13,110 @@
 <meta property="og:description" content="手机号 + 报名码登录，随时看自己过没过审、改报名资料。">
 <meta property="og:url" content="https://tlbs.top/login.html">
 <style>
+/* ============================================================
+   1) 4 层微明度背景分层：无纯黑，层间明度差 1~3%，
+      用「明度」而非「黑框线」来区分层级。
+   ------------------------------------------------------------
+   层1 最深底  · 层2 页面底  · 层3 卡片面  · 层4 输入/悬浮
+   ============================================================ */
 :root{
-  --bg:#07080c; --bg-2:#0b0d14; --surface:#10131d; --surface-2:#151928;
-  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.16);
-  --text:#eef1f7; --muted:#8a93a8; --dim:#565e73;
+  --bg:#0a0c11;        /* 层1 */
+  --bg-2:#0d1018;      /* 层2 */
+  --surface:#12151f;   /* 层3 */
+  --surface-2:#171b28; /* 层4 */
+  /* 边框一律用白色透明，绝不出现黑框或纯黑 */
+  --line:rgba(255,255,255,.07); --line-2:rgba(255,255,255,.14);
+  --text:#eef1f7; --muted:#8a93a8; --dim:#5c6478;
   --blue:#1d9cd8; --cyan:#38e1ff; --violet:#7c5cff;
   --grad:linear-gradient(120deg,#38e1ff 0%,#7c5cff 100%);
   --green:#22c55e; --red:#ef4444;
+  /* 3) 暗色字重全降：粗体一律降到轻量，避免暗底发糊（700→500 / 800→600 / 600→450） */
+  --w-strong:500; --w-heavy:600;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);
+/* 8) 正文换行用 pretty：避免孤行/不均匀断行 */
+body{
+  background:
+    radial-gradient(1100px 560px at 50% -12%, rgba(56,225,255,.055), transparent 62%),
+    radial-gradient(900px 500px at 100% 110%, rgba(124,92,255,.05), transparent 60%),
+    var(--bg);
+  color:var(--text);
   font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
-  line-height:1.7;min-height:100vh}
+  line-height:1.7;min-height:100vh;text-wrap:pretty;
+}
 a{color:inherit;text-decoration:none}
 .wrap{width:min(620px,92vw);margin:0 auto;padding:34px 0 70px}
 header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
-  background:rgba(7,8,12,.8);border-bottom:1px solid var(--line)}
+  background:rgba(10,12,17,.72);border-bottom:1px solid var(--line)}
 .nav-in{display:flex;align-items:center;gap:12px;height:60px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800}
+.brand{display:flex;align-items:center;gap:10px;font-weight:var(--w-heavy)}
 .brand img{height:26px;width:auto}
-.brand small{display:block;font-weight:500;font-size:11px;color:var(--muted)}
+.brand small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
 .nav ul{display:flex;gap:4px;margin-left:auto;list-style:none}
 .nav ul a{display:block;padding:7px 12px;border-radius:8px;font-size:14px;color:var(--muted)}
 .nav ul a:hover{color:var(--text);background:var(--surface-2)}
-.kicker{display:inline-flex;align-items:center;gap:9px;font:600 12px/1 ui-monospace,monospace;
+/* 6) 数字锁 tabular-nums：等宽数字，输入时宽度不抖 */
+.kicker,#code,.msg-in,.tips{font-variant-numeric:tabular-nums}
+.kicker{display:inline-flex;align-items:center;gap:9px;font-weight:450;font-size:12px;
   letter-spacing:.2em;color:var(--cyan);border:1px solid var(--line-2);
   padding:8px 14px;border-radius:999px;background:rgba(56,225,255,.06);margin-top:30px}
-h1{font-size:clamp(24px,4.4vw,38px);margin:14px 0 8px}
+/* 5) 图标下移 0.125em 对齐文字视觉中心 */
+.kicker i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--cyan);
+  box-shadow:0 0 12px var(--cyan);transform:translateY(.125em)}
+h1{font-size:clamp(24px,4.4vw,38px);margin:14px 0 8px;font-weight:var(--w-strong);letter-spacing:.5px}
 h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .lead{color:var(--muted);font-size:14.5px;margin-bottom:22px}
+.lead b{color:var(--text);font-weight:var(--w-strong)}
 .card{background:linear-gradient(180deg,var(--surface),var(--bg-2));
   border:1px solid var(--line);border-radius:16px;padding:26px}
 .field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
-label{font-size:13.5px;font-weight:700;color:#c9d2e0}
-input[type=text],input[type=tel]{background:var(--bg-2);border:1px solid var(--line-2);border-radius:10px;
+label{font-size:13.5px;font-weight:var(--w-strong);color:#c9d2e0}
+/* 2) 输入框聚焦：禁描边，改用加深的双环阴影 */
+input[type=text],input[type=tel]{background:var(--surface-2);border:1px solid var(--line-2);border-radius:10px;
   padding:13px 15px;color:var(--text);font-size:19px;letter-spacing:.28em;
   text-align:center;font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;
-  text-transform:uppercase;outline:none;transition:border-color .2s;width:100%}
+  text-transform:uppercase;outline:none;width:100%;
+  transition:box-shadow .35s cubic-bezier(.3,1.3,.4,1),border-color .35s}
 input.tel{text-transform:none;letter-spacing:.06em;font-size:18px}
 input::placeholder{letter-spacing:.28em;color:var(--dim)}
-input[type=text]:focus,input[type=tel]:focus{border-color:var(--cyan)}
+input[type=text]:focus,input[type=tel]:focus{
+  border-color:rgba(255,255,255,.14);   /* 描边不抢戏，focus 靠阴影表达 */
+  box-shadow:
+    0 0 0 2px rgba(56,225,255,.30),      /* 内环 */
+    0 0 0 6px rgba(56,225,255,.12),      /* 外环 */
+    0 16px 38px -12px rgba(56,225,255,.40); /* 加深的弥散双环 */
+}
 .submit{width:100%;padding:14px;border:none;border-radius:12px;background:var(--grad);
-  color:#06121a;font-size:16px;font-weight:800;cursor:pointer;
-  box-shadow:0 18px 60px rgba(56,225,255,.15);transition:.22s}
-.submit:hover{transform:translateY(-2px)}
-.submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.msg{display:none;margin-top:16px;padding:15px 18px;border-radius:11px;font-size:15px;line-height:1.7}
-.msg.on{display:block}
-.msg.ok{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.45);color:#9df3bb}
-.msg.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.4);color:#ffb4b4}
-.msg.wait{background:rgba(56,225,255,.1);border:1px solid rgba(56,225,255,.4);color:#bfeaf8}
-.msg b{display:block;font-size:19px;margin-bottom:5px}
-.tips{color:var(--dim);font-size:12.5px;margin-top:15px;text-align:center;line-height:1.9}
+  color:#06121a;font-size:16px;font-weight:var(--w-heavy);cursor:pointer;
+  box-shadow:0 18px 60px rgba(56,225,255,.15);transform-origin:center;will-change:transform;
+  transition:box-shadow .3s cubic-bezier(.3,1.3,.4,1),filter .3s}
+.submit:hover{box-shadow:0 22px 66px rgba(56,225,255,.26);filter:brightness(1.05)}
+.submit:disabled{opacity:.6;cursor:not-allowed}
+/* 7) 折叠用 Grid 0fr→1fr（现代平滑折叠，非 max-height 硬切） */
+.msg{display:grid;grid-template-rows:0fr;margin-top:16px;
+  transition:grid-template-rows .5s cubic-bezier(.34,1.35,.4,1)}
+.msg.on{grid-template-rows:1fr}
+.msg-in{overflow:hidden;min-height:0}
+.b{padding:15px 18px;border:1px solid;border-radius:11px;font-size:15px;line-height:1.7}
+.b.ok{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.45);color:#9df3bb}
+.b.err{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.4);color:#ffb4b4}
+.b.wait{background:rgba(56,225,255,.1);border-color:rgba(56,225,255,.4);color:#bfeaf8}
+.b b{display:block;font-size:19px;margin-bottom:5px;font-weight:var(--w-strong)}
+.tips{color:var(--dim);font-size:12.5px;margin-top:15px;text-align:center;line-height:1.9;text-wrap:pretty}
 .tips a{color:var(--cyan);text-decoration:underline}
 .card.foot{text-align:center;color:var(--dim);font-size:12.5px;margin-top:18px}
-@media (max-width:640px){.nav ul{display:none}}
 
+/* 4) 流式打字：逐字 blur(6px)→清晰渐显，120ms/字、字间错开 30ms */
+.st{opacity:0;white-space:pre}
+/* 白色字：inline-block 才能做 blur/transform */
+.st.bl{display:inline-block;will-change:opacity,filter,transform;animation:stBlur 120ms cubic-bezier(.2,.7,.3,1) forwards}
+/* 渐变字（background-clip:text）必须保持 inline、只做透明度 ——
+   inline-block 或 filter 都会破坏 clip，让渐变字变透明消失 */
+.st.gd{display:inline;animation:stFade 120ms cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes stBlur{from{opacity:0;filter:blur(6px);transform:translateY(.12em)}
+                  to{opacity:1;filter:blur(0);transform:none}}
+@keyframes stFade{from{opacity:0}to{opacity:1}}
+@media (max-width:640px){.nav ul{display:none}}
 
 /* ===== nav 修复（2026-11 起各页统一） =====
    症状：窗口一窄，品牌被导航挤成四行（天外来物 / 2026—2027 / LATIAO / CUP），
@@ -95,13 +143,11 @@ input[type=text]:focus,input[type=tel]:focus{border-color:var(--cyan)}
   .brand img{height:22px}
   .brand small{font-size:9.5px;letter-spacing:.04em}
 }
-/* ★ 手机上：品牌第一行，导航整体折到第二行 —— 一项不藏、一格不滑 */
 @media (max-width:780px){
   .nav-in{flex-wrap:wrap;min-height:0;padding:8px 0 6px;gap:0 8px;row-gap:4px}
   .brand{padding:2px 0}
   .brand span{font-size:13.5px}
   .brand small{display:none}
-  /* 以前这里（640px）是 display:none，手机等于没导航，改回可见 */
   .nav ul{display:flex;flex:1 1 100%;margin-left:0;justify-content:flex-start;
           flex-wrap:wrap;gap:0}
   .nav ul a{padding:6px 7px;font-size:12.5px}
@@ -134,11 +180,11 @@ input[type=text]:focus,input[type=tel]:focus{border-color:var(--cyan)}
 </header>
 
 <div class="wrap">
-  <span class="kicker"><i style="width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)"></i>SIGN IN · 我的报名</span>
+  <span class="kicker"><i></i>SIGN IN · 我的报名</span>
   <h1>登录<span>我的报名</span></h1>
   <p class="lead">
-    用报名时留的<b style="color:var(--text)">联系方式</b>（手机号 / 微信号 / 邮箱都行）
-    加上发给你的<b style="color:var(--text)">6 位报名码</b>登录。不用设密码，也不会发短信。
+    用报名时留的<b>联系方式</b>（手机号 / 微信号 / 邮箱都行）
+    加上发给你的<b>6 位报名码</b>登录。不用设密码，也不会发短信。
   </p>
 
   <div class="card">
@@ -147,7 +193,7 @@ input[type=text]:focus,input[type=tel]:focus{border-color:var(--cyan)}
         <label>报名时留的联系方式</label>
         <input type="text" id="contact" class="tel" maxlength="40"
                autocomplete="off" spellcheck="false" placeholder="手机号 / 微信号 / 邮箱">
-        <div class="sub" style="margin-top:6px">要和报名表上填的完全一致（不区分大小写，空格无所谓）。</div>
+        <div class="sub" style="margin-top:6px;color:var(--dim);font-size:12px">要和报名表上填的完全一致（不区分大小写，空格无所谓）。</div>
       </div>
       <div class="field">
         <label>6 位报名码</label>
@@ -156,7 +202,7 @@ input[type=text]:focus,input[type=tel]:focus{border-color:var(--cyan)}
       </div>
       <button class="submit" type="submit" id="btn">登录</button>
     </form>
-    <div class="msg" id="msg"></div>
+    <div class="msg" id="msg"><div class="msg-in" id="msgIn"></div></div>
     <p class="tips">
       登录状态会在这台手机上保留 30 天，下次直接就能看。<br>
       只是想快速看一眼过没过审？<a href="query.html">单独输报名码查</a>也行，不用登录。<br>
@@ -168,15 +214,124 @@ input[type=text]:focus,input[type=tel]:focus{border-color:var(--cyan)}
 </div>
 
 <script>
-// ★ 基准必须是站点根：下面拼的是 "/latiao/login"。
-//   写成 ".../latiao" 会拼成 /latiao/latiao/login（404），登录永远失败。
+/* ============================================================
+   物理弹簧引擎 —— 替代写死的 0.3s ease。
+   核心：让动画「记住手指甩出去的那股劲」。
+   ------------------------------------------------------------
+   弹簧方程：m·x'' + c·x' + k·x = 0（质量 m 归一为 1）
+      k = stiffness（刚度，越大回得越快）
+      c = damping（阻尼，越大越快停下、越没弹性）
+   阻尼比 ζ = c / (2·√(m·k))
+      ζ = 1   临界阻尼：最快稳定、零回弹（默认）
+      ζ ≈ 0.8 欠阻尼：带一点回弹，更有弹性
+   ------------------------------------------------------------
+   参数表（含用户指定）：
+     拖拽  {stiffness:1200, damping:80}  → ζ≈1.15 过阻尼，零回弹
+     点赞  {stiffness:380,  damping:18}  → ζ≈0.46 欠阻尼，微弹
+     按钮  {stiffness:380,  damping:22}  → ζ≈0.56 轻微回弹
+   拖拽松手时把手势的瞬时速度传进 velocity，就带上了那股劲；
+   滑到边界（min/max）会按 restitution 弹一下。
+   ============================================================ */
+function springAnim(opts){
+  const k = opts.stiffness, c = opts.damping, m = opts.mass || 1;
+  const to = opts.to, from = (opts.from != null) ? opts.from : 0;
+  let x = from - to;                          // 相对目标的位移
+  let v = opts.velocity || 0;                 // ★ 松手瞬间的初始速度
+  const min = (opts.min != null) ? opts.min : -Infinity;
+  const max = (opts.max != null) ? opts.max : Infinity;
+  const rest = opts.restitution != null ? opts.restitution : 0.4;
+  const cap = opts.maxDuration || 2200;
+  let last = performance.now(), t0 = performance.now();
+  return new Promise(function(res){
+    function frame(now){
+      let dt = (now - last) / 1000; last = now;
+      if(dt <= 0) dt = 0.001;
+      if(dt > 1/30) dt = 1/30;                // 掉帧时 clamp，避免积分爆炸
+      v += ((-k * x - c * v) / m) * dt;       // 弹簧力 + 阻尼力
+      x += v * dt;                            // 半隐式欧拉
+      if(x < min){ x = min; if(v < 0) v = -v * rest; }   // 边界回弹
+      else if(x > max){ x = max; if(v > 0) v = -v * rest; }
+      opts.onUpdate && opts.onUpdate(to + x, v);
+      if(Math.abs(x) < 0.0008 && Math.abs(v) < 0.0008){ res(to + x); return; }
+      if(now - t0 > cap){ res(to + x); return; }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  });
+}
+
+/* 9) 通用：拖拽 / 点赞 弹簧（login 页暂无拖拽/点赞元素，参数已备好，供其它页复用） */
+const SPRINGS = {
+  drag: {stiffness:1200, damping:80},    // 零回弹
+  like: {stiffness:380,  damping:18},    // 微弹
+  press:{stiffness:380,  damping:22}
+};
+
+/* 10) 复制对勾 2.5s 自隐（login 页暂无复制按钮，工具已备好） */
+function copyWithCheck(btn, text){
+  if(!navigator.clipboard){ return Promise.reject(new Error("no clipboard")); }
+  return navigator.clipboard.writeText(text).then(function(){
+    const old = btn.innerHTML;
+    btn.innerHTML = "✓";
+    setTimeout(function(){ btn.innerHTML = old; }, 2500);
+  });
+}
+
+/* 4) 流式打字：h1 逐字 blur(6px)→清晰渐显，120ms/字、字间错开 30ms */
+(function streamHeading(){
+  const h = document.querySelector("h1");
+  let order = 0;
+  (function walk(el, grad){
+    // ★ childNodes 是 live NodeList，边遍历边 replaceChild 会漏节点（渐变字就是被这样漏掉的），
+    //   先转成快照数组再遍历。
+    Array.prototype.slice.call(el.childNodes).forEach(function(n){
+      if(n.nodeType === 3){
+        const frag = document.createDocumentFragment();
+        for(const ch of n.nodeValue){
+          const i = document.createElement("i");
+          i.textContent = (ch === " ") ? "\u00a0" : ch;
+          i.className = grad ? "st gd" : "st bl";   // 渐变字不 blur：background-clip:text 与 filter 互斥
+          i.style.animationDelay = (order * 30) + "ms";
+          order++;
+          frag.appendChild(i);
+        }
+        n.parentNode.replaceChild(frag, n);
+      }else if(n.nodeType === 1){
+        walk(n, grad || n.tagName === "SPAN");
+      }
+    });
+  })(h, false);
+})();
+
 const API = "https://api.tlstudio.cn/latiao/login";
 const $ = id => document.getElementById(id);
 
+/* 按钮按压弹簧：按下压到 0.96，松开带着那股劲弹回 1（微弹） */
+(function(){
+  const btn = $("btn");
+  let press = null;
+  btn.addEventListener("pointerdown", function(){
+    if(press) press = null;
+    springAnim({stiffness:SPRINGS.press.stiffness, damping:SPRINGS.press.damping,
+                from:1, to:0.96, onUpdate:v => { btn.style.transform = "scale(" + v + ")"; }});
+  });
+  btn.addEventListener("pointerup", function(){
+    const cur = parseFloat((btn.style.transform.match(/[\d.]+/) || ["1"])[0]) || 1;
+    springAnim({stiffness:SPRINGS.like.stiffness, damping:SPRINGS.like.damping,
+                from:cur, to:1, velocity:0,
+                onUpdate:v => { btn.style.transform = "scale(" + v + ")"; }});
+  });
+  btn.addEventListener("pointerleave", function(){
+    springAnim({stiffness:SPRINGS.like.stiffness, damping:SPRINGS.like.damping,
+                from:(parseFloat((btn.style.transform.match(/[\d.]+/) || ["1"])[0]) || 1), to:1,
+                onUpdate:v => { btn.style.transform = "scale(" + v + ")"; }});
+  });
+})();
+
 function show(kind, title, body){
-  const m = $("msg");
-  m.className = "msg on " + kind;
-  m.innerHTML = "<b>" + title + "</b>" + (body ? String(body).replace(/\n/g, "<br>") : "");
+  $("msg").className = "msg on";
+  $("msgIn").innerHTML = "<div class='b " + kind + "'><b>" + title + "</b>" +
+    (body ? String(body).replace(/\n/g, "<br>") : "") + "</div>";
 }
 
 var busy = false;
@@ -220,7 +375,7 @@ $("f").addEventListener("submit", async function(ev){
   return false;
 });
 
-// 已经登录过就直接跳过去，省得再输一遍；这台机器报过名的，手机号自动带上
+// 已经登录过就直接跳过去；这台机器报过名的，联系方式自动带上
 try{
   if(localStorage.getItem("lt_token")){ location.replace("me.html"); }
   else{
