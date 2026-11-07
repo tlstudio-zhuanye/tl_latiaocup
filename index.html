@@ -52,13 +52,13 @@
 </script>
 <style>
 :root{
-  --bg:#07080c; --bg-2:#0b0d14; --surface:#10131d; --surface-2:#151928;
-  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.16);
-  --text:#eef1f7; --muted:#8a93a8; --dim:#565e73;
-  --blue:#1d9cd8; --cyan:#38e1ff; --violet:#7c5cff;
-  --grad:linear-gradient(120deg,#38e1ff 0%,#7c5cff 100%);
-  --glow:0 18px 60px rgba(56,225,255,.15);
-  --r:14px;
+  --bg:#ffffff; --bg-2:#f5f5f5; --surface:#ffffff; --surface-2:#eeeeee;
+  --line:#e7e7e7; --line-2:#c9c9c9;
+  --text:#111111; --muted:#5f5f5f; --dim:#737373;
+  --blue:#111111; --cyan:#111111; --violet:#3a3a3a;
+  --grad:linear-gradient(120deg,#111111 0%,#3a3a3a 100%);
+  --glow:0 8px 24px rgba(0,0,0,.10);
+  --r:16px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -80,10 +80,10 @@ h2{font-size:clamp(24px,3.4vw,36px);letter-spacing:.5px;margin:10px 0 8px}
 /* ---------- nav ---------- */
 header.nav{
   position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
-  background:rgba(7,8,12,.78);border-bottom:1px solid var(--line);
+  background:rgba(255,255,255,.86);border-bottom:1px solid var(--line);
 }
 .nav-in{display:flex;align-items:center;gap:14px;height:62px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.4px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.4px}
 .brand img{height:26px;width:auto}
 .brand small{display:block;font-weight:500;font-size:11px;color:var(--muted);letter-spacing:.1em}
 .nav ul{display:flex;gap:6px;margin-left:auto;list-style:none;flex-wrap:wrap}
@@ -97,24 +97,18 @@ header.nav{
   font-weight:700;font-size:14px;border:1px solid var(--line-2);transition:.22s;cursor:pointer;
 }
 .btn:hover{transform:translateY(-2px)}
-.btn-solid{background:var(--grad);color:#06121a;border:none;box-shadow:var(--glow)}
+.btn-solid{background:var(--grad);color:#ffffff;border:none;box-shadow:var(--glow)}
 .btn-line:hover{border-color:var(--cyan);color:var(--cyan)}
 
 /* ---------- hero ---------- */
 .hero{padding:96px 0 70px;position:relative;overflow:hidden}
-.hero:before{
-  content:"";position:absolute;inset:-30% -10% auto -10%;height:640px;
-  background:radial-gradient(700px 380px at 22% 20%,rgba(56,225,255,.16),transparent 60%),
-             radial-gradient(600px 340px at 78% 8%,rgba(124,92,255,.16),transparent 60%);
-  pointer-events:none;
-}
 .kicker{
   display:inline-flex;align-items:center;gap:9px;font:600 12px/1 ui-monospace,monospace;
   letter-spacing:.2em;color:var(--cyan);border:1px solid var(--line-2);
-  padding:8px 14px;border-radius:999px;background:rgba(56,225,255,.06);
+  padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.06);
 }
-.kicker i{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
-h1{font-size:clamp(32px,6.2vw,64px);line-height:1.12;margin:22px 0 14px;letter-spacing:-.5px}
+.kicker i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--cyan)}
+h1{font-size:clamp(32px,6.2vw,64px);font-weight:600;line-height:1.12;margin:22px 0 14px;letter-spacing:-.5px}
 h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .lead{color:var(--muted);font-size:clamp(15px,1.6vw,18px);max-width:760px}
 .hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
@@ -136,8 +130,8 @@ h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text
 .num{font:800 26px/1 ui-monospace,monospace;background:var(--grad);
      -webkit-background-clip:text;background-clip:text;color:transparent}
 .tag{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;
-     background:rgba(29,156,216,.16);color:#7fd0f2;border:1px solid rgba(29,156,216,.35)}
-.tag.v{background:rgba(124,92,255,.16);color:#b3a4ff;border-color:rgba(124,92,255,.35)}
+     background:#f0f0f0;color:#3a3a3a;border:1px solid #e7e7e7}
+.tag.v{background:#ffffff;color:#5f5f5f;border:1px dashed #c9c9c9}
 
 /* ---------- timeline ---------- */
 .tl{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:8px}
@@ -151,35 +145,34 @@ h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text
   background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;
   transition:.25s;
 }
-.task:hover{border-color:rgba(56,225,255,.35);box-shadow:0 22px 60px rgba(0,0,0,.45)}
+.task:hover{border-color:#c9c9c9;box-shadow:0 14px 36px rgba(0,0,0,.10)}
 .task-top{display:flex;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line)}
 .task-top .no{font:800 13px/1 ui-monospace,monospace;color:var(--cyan);letter-spacing:.14em}
 .task-top h3{font-size:19px}
 .score{margin-left:auto;font:800 15px/1 ui-monospace,monospace;padding:8px 12px;border-radius:999px;
-  background:linear-gradient(120deg,rgba(56,225,255,.18),rgba(124,92,255,.18));
-  border:1px solid rgba(56,225,255,.35);color:#a9ecff;white-space:nowrap}
+  background:#f0f0f0;border:1px solid #e7e7e7;color:#111111;white-space:nowrap}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--line)}
-.pair figure{position:relative;background:#0a0c12}
+.pair figure{position:relative;background:#eeeeee}
 .pair img{width:100%;aspect-ratio:16/9;object-fit:cover}
 .pair figcaption{
   position:absolute;left:10px;bottom:10px;font-size:12px;font-weight:700;
-  padding:4px 9px;border-radius:6px;background:rgba(7,8,12,.82);border:1px solid var(--line-2);
+  padding:4px 9px;border-radius:6px;background:rgba(255,255,255,.88);border:1px solid var(--line-2);
 }
 .task-body{padding:18px 20px 20px}
 .task-body p{color:var(--muted);font-size:14px;margin-bottom:12px}
 .kv{display:grid;grid-template-columns:76px 1fr;gap:8px 12px;font-size:13.5px}
 .kv dt{color:var(--cyan);font-weight:700}
-.kv dd{color:#c9d2e0}
+.kv dd{color:#3a3a3a}
 .subitem{font-size:12.5px;color:var(--muted);font-family:ui-monospace,monospace}
 
 /* ---------- tables ---------- */
 .tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 table{width:100%;border-collapse:collapse;min-width:520px;font-size:14px}
 th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line)}
-th{background:rgba(56,225,255,.08);color:#bfeaf8;font-size:13px;letter-spacing:.04em;white-space:nowrap}
+th{background:#f5f5f5;color:#111111;font-size:13px;letter-spacing:.04em;white-space:nowrap}
 td:last-child,th:last-child{text-align:right;white-space:nowrap}
 tr:last-child td{border-bottom:none}
-tr.hi td{background:rgba(56,225,255,.07);font-weight:700}
+tr.hi td{background:#fafafa;font-weight:700}
 .note{color:var(--dim);font-size:12.5px;margin-top:10px}
 
 /* ---------- download ---------- */
@@ -188,10 +181,10 @@ tr.hi td{background:rgba(56,225,255,.07);font-weight:700}
   display:flex;align-items:center;gap:16px;padding:18px 20px;border:1px solid var(--line);
   border-radius:14px;background:linear-gradient(180deg,var(--surface),var(--bg-2));transition:.22s;
 }
-.dl-item:hover{border-color:rgba(56,225,255,.4);transform:translateY(-2px)}
+.dl-item:hover{border-color:#c9c9c9;transform:translateY(-2px)}
 .ic{
   width:44px;height:44px;flex:0 0 44px;border-radius:11px;display:grid;place-items:center;
-  background:rgba(56,225,255,.12);border:1px solid rgba(56,225,255,.3);font-size:19px;
+  background:#f5f5f5;border:1px solid #e7e7e7;
 }
 .dl-item .t{font-weight:700}
 .dl-item .d{color:var(--muted);font-size:13px}
@@ -265,6 +258,20 @@ footer{border-top:1px solid var(--line);padding:44px 0 34px;background:var(--bg-
   .brand img{height:20px}
   .nav ul a{padding:5px 5px;font-size:12px}
 }
+
+/* ===== emoji→SVG 图标（黑白 stroke，currentColor 跟随文字色）===== */
+.i{flex:0 0 auto}
+a.btn .i, .btn .i{display:inline-block;width:1.05em;height:1.05em;vertical-align:-0.16em}
+.ic .i{width:22px;height:22px;color:#111111}
+.big .i{width:46px;height:46px;color:#c9c9c9}
+/* 统一标题字重 */
+h1,h2,h3,h4{font-weight:600}
+/* 状态图标统一尺寸 */
+.si{width:1em;height:1em;vertical-align:-.14em;flex:0 0 auto;stroke-width:1.7}
+/* 导航统一：当前页高亮 / 报名 CTA */
+.nav ul a.cta{color:var(--text);font-weight:700}
+.nav ul a.on{color:var(--text);background:var(--surface-2)}
+header.nav .nav-in{width:min(1180px,92vw);margin:0 auto}
 </style>
 </head>
 <body>
@@ -284,7 +291,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 34px;background:var(--bg-
       <li><a href="map.html">每日地图</a></li>
       <li><a href="query.html">查结果</a></li>
       <li><a href="login.html">我的报名</a></li>
-      <li><a href="signup.html" style="color:var(--cyan);font-weight:700">报名 →</a></li>
+      <li><a href="signup.html" class="cta">报名 →</a></li>
     </ul>
   </div>
 </header>
@@ -300,11 +307,11 @@ footer{border-top:1px solid var(--line);padding:44px 0 34px;background:var(--bg-
       比赛地图每日更新，每天都不一样。
     </p>
     <div class="hero-cta">
-      <a class="btn btn-solid" href="signup.html">✍ 立即报名参赛</a>
-      <a class="btn btn-line" href="query.html">🔎 已报名？查审核结果（凭 6 位报名码）</a>
-      <a class="btn btn-line" href="#download">⬇ 下载资源包（GitHub）</a>
+      <a class="btn btn-solid" href="signup.html"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> 立即报名参赛</a>
+      <a class="btn btn-line" href="query.html"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> 已报名？查审核结果（凭 6 位报名码）</a>
+      <a class="btn btn-line" href="#download"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg> 下载资源包（GitHub）</a>
       <a class="btn btn-line" href="#tasks">查看四大任务</a>
-      <a class="btn btn-line" href="map.html">🗺️ 今日地图（在线看）</a>
+      <a class="btn btn-line" href="map.html"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><path d="M8 2v16"/><path d="M16 6v16"/></svg> 今日地图（在线看）</a>
     </div>
     <div class="hero-meta">
       <div><b>4</b>大任务</div>
@@ -513,27 +520,27 @@ footer{border-top:1px solid var(--line);padding:44px 0 34px;background:var(--bg-
 
     <div class="dl rv">
       <a class="dl-item" download href="https://github.com/tlstudio-zhuanye/tl_latiaocup/releases/latest/download/program-901.wbj" target="_blank" rel="noopener">
-        <span class="ic">🧩</span>
+        <span class="ic"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
         <span><span class="t">附赠 901 程序包</span><br><span class="d">比赛程序包 · .wbj，用比赛专用软件打开，直连下载</span></span>
         <span class="go">下载 WBJ →</span>
       </a>
       <a class="dl-item" download href="https://github.com/tlstudio-zhuanye/tl_latiaocup/releases/latest/download/latiaocup-2026-2027-rules.pdf" target="_blank" rel="noopener">
-        <span class="ic">📕</span>
+        <span class="ic"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
         <span><span class="t">比赛规则（完整版 PDF）</span><br><span class="d">10 页：规则 / 四大任务图集 / 分表 / 裁判计分表</span></span>
         <span class="go">下载 PDF →</span>
       </a>
       <a class="dl-item" download href="https://github.com/tlstudio-zhuanye/tl_latiaocup/releases/latest/download/daily-map-viewer.exe" target="_blank" rel="noopener">
-        <span class="ic">🗺️</span>
+        <span class="ic"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><path d="M8 2v16"/><path d="M16 6v16"/></svg></span>
         <span><span class="t">TL-天外来物每日地图查看器（每日不一样）.exe</span><br><span class="d">当日检录后打开，查看当天地图与任务安排</span></span>
         <span class="go">下载 EXE →</span>
       </a>
       <a class="dl-item" download href="https://github.com/tlstudio-zhuanye/tl_latiaocup/releases/latest/download/program-902.wbj" target="_blank" rel="noopener">
-        <span class="ic">🧩</span>
+        <span class="ic"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
         <span><span class="t">附赠 902 程序包</span><br><span class="d">供各队学习参考，不强制使用</span></span>
         <span class="go">下载 WBJ →</span>
       </a>
       <a class="dl-item" download href="https://github.com/tlstudio-zhuanye/tl_latiaocup/archive/refs/heads/main.zip" target="_blank" rel="noopener">
-        <span class="ic">📦</span>
+        <span class="ic"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg></span>
         <span><span class="t">整包下载（仓库 ZIP）</span><br><span class="d">一次性拉取仓库内全部资源</span></span>
         <span class="go">下载 ZIP →</span>
       </a>
@@ -542,7 +549,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 34px;background:var(--bg-
     <div class="card rv" style="margin-top:20px">
       <h3>仓库地址</h3>
       <p style="font-family:ui-monospace,monospace">
-        <a href="https://github.com/tlstudio-zhuanye/tl_latiaocup" target="_blank" rel="noopener" style="color:var(--cyan)">
+        <a href="https://github.com/tlstudio-zhuanye/tl_latiaocup" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">
           github.com/tlstudio-zhuanye/tl_latiaocup
         </a>
       </p>
@@ -567,10 +574,10 @@ footer{border-top:1px solid var(--line);padding:44px 0 34px;background:var(--bg-
         联系：19127101909　|　谭钟睿（广西南宁）<br>
         器材平台：鲸鱼机器人（WhalesBot）
         <div style="margin-top:10px">
-          <a href="signup.html" style="color:var(--cyan)">报名参赛</a> ·
-          <a href="query.html" style="color:var(--cyan)">查审核结果（凭报名码）</a> ·
-          <a href="login.html" style="color:var(--cyan)">我的报名（登录后可改资料）</a> ·
-          <a href="map.html" style="color:var(--cyan)">每日地图</a>
+          <a href="signup.html" style="text-decoration:underline;text-underline-offset:3px">报名参赛</a> ·
+          <a href="query.html" style="text-decoration:underline;text-underline-offset:3px">查审核结果（凭报名码）</a> ·
+          <a href="login.html" style="text-decoration:underline;text-underline-offset:3px">我的报名（登录后可改资料）</a> ·
+          <a href="map.html" style="text-decoration:underline;text-underline-offset:3px">每日地图</a>
         </div>
       </div>
     </div>

@@ -11,12 +11,12 @@
 <meta name="robots" content="noindex,nofollow">
 <style>
 :root{
-  --bg:#07080c; --bg-2:#0b0d14; --surface:#10131d; --surface-2:#151928;
-  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.16);
-  --text:#eef1f7; --muted:#8a93a8; --dim:#565e73;
-  --blue:#1d9cd8; --cyan:#38e1ff; --violet:#7c5cff;
-  --grad:linear-gradient(120deg,#38e1ff 0%,#7c5cff 100%);
-  --green:#22c55e; --red:#ef4444; --amber:#f59e0b;
+  --bg:#ffffff; --bg-2:#f5f5f5; --surface:#ffffff; --surface-2:#eeeeee;
+  --line:#e7e7e7; --line-2:#c9c9c9;
+  --text:#111111; --muted:#5f5f5f; --dim:#737373;
+  --blue:#111111; --cyan:#111111; --violet:#3a3a3a;
+  --grad:linear-gradient(120deg,#111111 0%,#3a3a3a 100%);
+  --green:#111111; --red:#111111; --amber:#5f5f5f;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);
@@ -25,9 +25,9 @@ body{background:var(--bg);color:var(--text);
 a{color:inherit;text-decoration:none}
 .wrap{width:min(760px,92vw);margin:0 auto;padding:34px 0 70px}
 header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
-  background:rgba(7,8,12,.8);border-bottom:1px solid var(--line)}
-.nav-in{display:flex;align-items:center;gap:12px;height:60px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800}
+  background:rgba(255,255,255,.86);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;gap:12px;height:62px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.4px}
 .brand img{height:26px;width:auto}
 .brand small{display:block;font-weight:500;font-size:11px;color:var(--muted)}
 .nav ul{display:flex;gap:4px;margin-left:auto;list-style:none}
@@ -35,8 +35,9 @@ header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
 .nav ul a:hover{color:var(--text);background:var(--surface-2)}
 .kicker{display:inline-flex;align-items:center;gap:9px;font:600 12px/1 ui-monospace,monospace;
   letter-spacing:.2em;color:var(--cyan);border:1px solid var(--line-2);
-  padding:8px 14px;border-radius:999px;background:rgba(56,225,255,.06);margin-top:30px}
-h1{font-size:clamp(24px,4.4vw,36px);margin:14px 0 8px}
+  padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.06);margin-top:30px}
+.kicker i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--cyan);transform:translateY(.125em)}
+h1{font-size:clamp(26px,4.6vw,38px);margin:14px 0 8px;font-weight:600;letter-spacing:-.01em}
 h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .lead{color:var(--muted);font-size:14.5px;margin-bottom:22px}
 .card{background:linear-gradient(180deg,var(--surface),var(--bg-2));
@@ -44,10 +45,11 @@ h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text
 .card h2{font-size:18px;margin-bottom:4px}
 .sub{color:var(--dim);font-size:12.5px;margin-bottom:16px}
 .badge{display:inline-block;padding:5px 12px;border-radius:999px;font-size:13px;font-weight:800}
-.b-ok{background:rgba(34,197,94,.14);color:#7ee2a8;border:1px solid rgba(34,197,94,.4)}
-.b-rej{background:rgba(239,68,68,.12);color:#ff9b9b;border:1px solid rgba(239,68,68,.4)}
-.b-pend{background:rgba(245,158,11,.12);color:#fcd34d;border:1px solid rgba(245,158,11,.4)}
-.b-out{background:rgba(167,139,250,.14);color:#c9b8ff;border:1px solid rgba(167,139,250,.45)}
+/* 黑白状态语义：实心=通过 / 黑边描边=拒签 / 浅灰=待审 / 虚线=退出 */
+.b-ok{background:#111111;color:#ffffff;border:1px solid #111111}
+.b-rej{background:#ffffff;color:#111111;border:1.5px solid #111111}
+.b-pend{background:#f0f0f0;color:#5f5f5f;border:1px solid #d5d5d5}
+.b-out{background:#fafafa;color:#737373;border:1px dashed #c9c9c9}
 .codebox{display:flex;align-items:center;justify-content:space-between;gap:12px;
   background:var(--bg-2);border:1px dashed var(--line-2);border-radius:12px;
   padding:14px 18px;margin:12px 0 18px}
@@ -59,32 +61,33 @@ h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .f{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
 .f.full{grid-column:1 / -1}
-label{font-size:13px;font-weight:700;color:#c9d2e0}
+label{font-size:13px;font-weight:700;color:#3a3a3a}
 input[type=text],textarea,select{background:var(--bg-2);border:1px solid var(--line-2);
   border-radius:10px;padding:11px 13px;color:var(--text);font-size:15px;
   font-family:inherit;outline:none;width:100%}
 textarea{min-height:78px;resize:vertical}
 input:focus,textarea:focus,select:focus{border-color:var(--cyan)}
 .save{width:100%;padding:12px;border:none;border-radius:11px;background:var(--grad);
-  color:#06121a;font-size:15px;font-weight:800;cursor:pointer}
+  color:#ffffff;font-size:15px;font-weight:800;cursor:pointer}
 .save:disabled{opacity:.6;cursor:not-allowed}
-.quit{width:100%;margin-top:10px;padding:11px;border:1px solid rgba(239,68,68,.45);
-  border-radius:11px;background:rgba(239,68,68,.08);color:#ff9b9b;font-size:14px;
+.quit{width:100%;margin-top:10px;padding:11px;border:1.5px solid #111111;
+  border-radius:11px;background:#ffffff;color:#111111;font-size:14px;
   font-weight:800;cursor:pointer}
-.quit:hover{background:rgba(239,68,68,.16)}
-.rejoin{width:100%;padding:12px;border:1px solid rgba(56,225,255,.45);border-radius:11px;
-  background:rgba(56,225,255,.08);color:#bfeaf8;font-size:15px;font-weight:800;cursor:pointer}
+.quit:hover{background:#f0f0f0}
+.rejoin{width:100%;padding:12px;border:1px solid #111111;border-radius:11px;
+  background:#111111;color:#ffffff;font-size:15px;font-weight:800;cursor:pointer}
+.rejoin:hover{background:#3a3a3a;border-color:#3a3a3a}
 .tip{color:var(--dim);font-size:12.5px;margin-top:10px;line-height:1.8}
-.tip a{color:var(--cyan);text-decoration:underline}
-.note{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);
-  border-radius:10px;padding:11px 14px;color:#ffb4b4;font-size:13.5px;margin-bottom:14px}
-.note.ok{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.3);color:#9df3bb}
+.tip a{color:#111111;text-decoration:underline}
+.note{background:#fafafa;border:1px solid #c9c9c9;
+  border-radius:10px;padding:11px 14px;color:#5f5f5f;font-size:13.5px;margin-bottom:14px}
+.note.ok{background:#f0f0f0;border-color:#111111;color:#111111}
 .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
 .msg{display:none;padding:14px 18px;border-radius:11px;font-size:14.5px;margin-bottom:16px}
 .msg.on{display:block}
-.msg.ok{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.45);color:#9df3bb}
-.msg.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.4);color:#ffb4b4}
-.msg.wait{background:rgba(56,225,255,.1);border:1px solid rgba(56,225,255,.4);color:#bfeaf8}
+.msg.ok{background:#111111;color:#ffffff}
+.msg.err{background:#fafafa;border:1.5px solid #111111;color:#111111}
+.msg.wait{background:#f0f0f0;color:#5f5f5f}
 .card.foot{text-align:center;color:var(--dim);font-size:12.5px}
 @media (max-width:640px){.nav ul{display:none}.grid{grid-template-columns:1fr}}
 
@@ -130,30 +133,40 @@ input:focus,textarea:focus,select:focus{border-color:var(--cyan)}
   .brand img{height:20px}
   .nav ul a{padding:5px 5px;font-size:12px}
 }
+/* 统一标题字重 */
+h1,h2,h3,h4{font-weight:600}
+/* 状态图标统一尺寸 */
+.si{width:1em;height:1em;vertical-align:-.14em;flex:0 0 auto;stroke-width:1.7}
+/* 导航统一：当前页高亮 / 报名 CTA */
+.nav ul a.cta{color:var(--text);font-weight:700}
+.nav ul a.on{color:var(--text);background:var(--surface-2)}
+header.nav .nav-in{width:min(1180px,92vw);margin:0 auto}
 </style>
 </head>
 <body>
 
 <header class="nav">
-  <div class="wrap nav-in" style="padding:0;width:min(1180px,92vw)">
+  <div class="wrap nav-in">
     <a class="brand" href="index.html">
       <img src="assets/img/logo-tlstudio.png" alt="TLSTUDIO">
       <span>辣条杯 · 天外来物<small>2026—2027 LATIAO CUP</small></span>
     </a>
     <ul>
       <li><a href="index.html#about">赛事</a></li>
+      <li><a href="index.html#rules">规则</a></li>
       <li><a href="index.html#tasks">任务</a></li>
+      <li><a href="index.html#score">计分</a></li>
       <li><a href="index.html#download">下载</a></li>
       <li><a href="map.html">每日地图</a></li>
-      <li><a href="signup.html">报名</a></li>
       <li><a href="query.html">查结果</a></li>
-      <li><a href="login.html" style="color:var(--cyan)">我的报名</a></li>
+      <li><a href="login.html" class="on">我的报名</a></li>
+      <li><a href="signup.html" class="cta">报名 →</a></li>
     </ul>
   </div>
 </header>
 
 <div class="wrap">
-  <span class="kicker"><i style="width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)"></i>MY TEAM · 我的报名</span>
+  <span class="kicker"><i></i>MY TEAM · 我的报名</span>
   <h1>我的<span>报名</span></h1>
   <div id="box">
     <div class="bar">
@@ -163,8 +176,8 @@ input:focus,textarea:focus,select:focus{border-color:var(--cyan)}
     </div>
     <div class="msg" id="msg"></div>
     <div id="list"></div>
-    <div class="card" id="closeBox" style="border-color:rgba(239,68,68,.35)">
-      <h2 style="color:#ff9b9b">注销账号</h2>
+    <div class="card" id="closeBox" style="border-color:#c9c9c9">
+      <h2 style="color:#111111">注销账号</h2>
       <div class="sub">把你这个联系方式名下的<b>全部</b>报名一起删除（联系方式、选手、教练等资料全部清除）并退出登录。<br>
         <b>不可恢复</b> —— 只是某一支队伍不参加的话，用卡片里的「退出比赛」就够了。</div>
       <button class="quit" onclick="delAccount()">注销账号并清空我的报名数据</button>
@@ -264,7 +277,7 @@ async function load(){
   msg("");
   $("who").textContent = "联系方式 " + (j.contact || "") + " · 共 " + (j.count || 0) + " 条报名";
   $("list").innerHTML = (j.items || []).map(cardHtml).join("") ||
-    '<div class="card">这个联系方式名下还没有报名。<br><a href="signup.html" style="color:var(--cyan)">去报名 →</a></div>';
+    '<div class="card">这个联系方式名下还没有报名。<br><a href="signup.html" style="text-decoration:underline;text-underline-offset:3px">去报名 →</a></div>';
 }
 
 async function save(btn){
@@ -338,7 +351,7 @@ window.quit = quit; window.delAccount = delAccount;
 
 if(!token()){
   $("who").textContent = "未登录";
-  $("list").innerHTML = '<div class="card">还没登录。<br><a href="login.html" style="color:var(--cyan)">用联系方式 + 报名码登录 →</a></div>';
+  $("list").innerHTML = '<div class="card">还没登录。<br><a href="login.html" style="text-decoration:underline;text-underline-offset:3px">用联系方式 + 报名码登录 →</a></div>';
   $("closeBox").style.display = "none";     // 没登录谈不上注销
 }else{
   load();

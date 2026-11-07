@@ -20,26 +20,23 @@
    层1 最深底  · 层2 页面底  · 层3 卡片面  · 层4 输入/悬浮
    ============================================================ */
 :root{
-  --bg:#0a0c11;        /* 层1 */
-  --bg-2:#0d1018;      /* 层2 */
-  --surface:#12151f;   /* 层3 */
-  --surface-2:#171b28; /* 层4 */
+  --bg:#ffffff;        /* 层1 */
+  --bg-2:#f5f5f5;      /* 层2 */
+  --surface:#ffffff;   /* 层3 */
+  --surface-2:#eeeeee; /* 层4 */
   /* 边框一律用白色透明，绝不出现黑框或纯黑 */
-  --line:rgba(255,255,255,.07); --line-2:rgba(255,255,255,.14);
-  --text:#eef1f7; --muted:#8a93a8; --dim:#5c6478;
-  --blue:#1d9cd8; --cyan:#38e1ff; --violet:#7c5cff;
-  --grad:linear-gradient(120deg,#38e1ff 0%,#7c5cff 100%);
-  --green:#22c55e; --red:#ef4444;
+  --line:#e7e7e7; --line-2:#c9c9c9;
+  --text:#111111; --muted:#5f5f5f; --dim:#737373;
+  --blue:#111111; --cyan:#111111; --violet:#3a3a3a;
+  --grad:linear-gradient(120deg,#111111 0%,#3a3a3a 100%);
+  --green:#111111; --red:#111111;
   /* 3) 暗色字重全降：粗体一律降到轻量，避免暗底发糊（700→500 / 800→600 / 600→450） */
   --w-strong:500; --w-heavy:600;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 /* 8) 正文换行用 pretty：避免孤行/不均匀断行 */
 body{
-  background:
-    radial-gradient(1100px 560px at 50% -12%, rgba(56,225,255,.055), transparent 62%),
-    radial-gradient(900px 500px at 100% 110%, rgba(124,92,255,.05), transparent 60%),
-    var(--bg);
+  background:var(--bg);
   color:var(--text);
   font-family:"Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
   line-height:1.7;min-height:100vh;text-wrap:pretty;
@@ -47,9 +44,9 @@ body{
 a{color:inherit;text-decoration:none}
 .wrap{width:min(620px,92vw);margin:0 auto;padding:34px 0 70px}
 header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
-  background:rgba(10,12,17,.72);border-bottom:1px solid var(--line)}
-.nav-in{display:flex;align-items:center;gap:12px;height:60px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:var(--w-heavy)}
+  background:rgba(255,255,255,.86);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;gap:12px;height:62px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.4px}
 .brand img{height:26px;width:auto}
 .brand small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
 .nav ul{display:flex;gap:4px;margin-left:auto;list-style:none}
@@ -59,18 +56,18 @@ header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
 .kicker,#code,.msg-in,.tips{font-variant-numeric:tabular-nums}
 .kicker{display:inline-flex;align-items:center;gap:9px;font-weight:450;font-size:12px;
   letter-spacing:.2em;color:var(--cyan);border:1px solid var(--line-2);
-  padding:8px 14px;border-radius:999px;background:rgba(56,225,255,.06);margin-top:30px}
+  padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.06);margin-top:30px}
 /* 5) 图标下移 0.125em 对齐文字视觉中心 */
 .kicker i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--cyan);
-  box-shadow:0 0 12px var(--cyan);transform:translateY(.125em)}
-h1{font-size:clamp(24px,4.4vw,38px);margin:14px 0 8px;font-weight:var(--w-strong);letter-spacing:.5px}
+  transform:translateY(.125em)}
+h1{font-size:clamp(26px,4.6vw,38px);margin:14px 0 8px;font-weight:600;letter-spacing:-.01em}
 h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .lead{color:var(--muted);font-size:14.5px;margin-bottom:22px}
 .lead b{color:var(--text);font-weight:var(--w-strong)}
 .card{background:linear-gradient(180deg,var(--surface),var(--bg-2));
   border:1px solid var(--line);border-radius:16px;padding:26px}
 .field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
-label{font-size:13.5px;font-weight:var(--w-strong);color:#c9d2e0}
+label{font-size:13.5px;font-weight:var(--w-strong);color:#3a3a3a}
 /* 2) 输入框聚焦：禁描边，改用加深的双环阴影 */
 input[type=text],input[type=tel]{background:var(--surface-2);border:1px solid var(--line-2);border-radius:10px;
   padding:13px 15px;color:var(--text);font-size:19px;letter-spacing:.28em;
@@ -80,17 +77,17 @@ input[type=text],input[type=tel]{background:var(--surface-2);border:1px solid va
 input.tel{text-transform:none;letter-spacing:.06em;font-size:18px}
 input::placeholder{letter-spacing:.28em;color:var(--dim)}
 input[type=text]:focus,input[type=tel]:focus{
-  border-color:rgba(255,255,255,.14);   /* 描边不抢戏，focus 靠阴影表达 */
+  border-color:#c9c9c9;   /* 描边不抢戏，focus 靠阴影表达 */
   box-shadow:
-    0 0 0 2px rgba(56,225,255,.30),      /* 内环 */
-    0 0 0 6px rgba(56,225,255,.12),      /* 外环 */
-    0 16px 38px -12px rgba(56,225,255,.40); /* 加深的弥散双环 */
+    0 0 0 2px rgba(0,0,0,.30),      /* 内环 */
+    0 0 0 6px rgba(0,0,0,.12),      /* 外环 */
+    0 16px 38px -12px rgba(0,0,0,.40); /* 加深的弥散双环 */
 }
 .submit{width:100%;padding:14px;border:none;border-radius:12px;background:var(--grad);
-  color:#06121a;font-size:16px;font-weight:var(--w-heavy);cursor:pointer;
-  box-shadow:0 18px 60px rgba(56,225,255,.15);transform-origin:center;will-change:transform;
+  color:#ffffff;font-size:16px;font-weight:var(--w-heavy);cursor:pointer;
+  box-shadow:0 10px 28px rgba(0,0,0,.10);transform-origin:center;will-change:transform;
   transition:box-shadow .3s cubic-bezier(.3,1.3,.4,1),filter .3s}
-.submit:hover{box-shadow:0 22px 66px rgba(56,225,255,.26);filter:brightness(1.05)}
+.submit:hover{box-shadow:0 14px 36px rgba(0,0,0,.14);filter:brightness(1.05)}
 .submit:disabled{opacity:.6;cursor:not-allowed}
 /* 7) 折叠用 Grid 0fr→1fr（现代平滑折叠，非 max-height 硬切） */
 .msg{display:grid;grid-template-rows:0fr;margin-top:16px;
@@ -98,9 +95,9 @@ input[type=text]:focus,input[type=tel]:focus{
 .msg.on{grid-template-rows:1fr}
 .msg-in{overflow:hidden;min-height:0}
 .b{padding:15px 18px;border:1px solid;border-radius:11px;font-size:15px;line-height:1.7}
-.b.ok{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.45);color:#9df3bb}
-.b.err{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.4);color:#ffb4b4}
-.b.wait{background:rgba(56,225,255,.1);border-color:rgba(56,225,255,.4);color:#bfeaf8}
+.b.ok{background:#111111;color:#ffffff;border-color:#111111}
+.b.err{background:#ffffff;color:#111111;border-color:#111111}
+.b.wait{background:#f0f0f0;color:#5f5f5f;border-color:#c9c9c9}
 .b b{display:block;font-size:19px;margin-bottom:5px;font-weight:var(--w-strong)}
 .tips{color:var(--dim);font-size:12.5px;margin-top:15px;text-align:center;line-height:1.9;text-wrap:pretty}
 .tips a{color:var(--cyan);text-decoration:underline}
@@ -157,24 +154,34 @@ input[type=text]:focus,input[type=tel]:focus{
   .brand img{height:20px}
   .nav ul a{padding:5px 5px;font-size:12px}
 }
+/* 统一标题字重 */
+h1,h2,h3,h4{font-weight:600}
+/* 状态图标统一尺寸 */
+.si{width:1em;height:1em;vertical-align:-.14em;flex:0 0 auto;stroke-width:1.7}
+/* 导航统一：当前页高亮 / 报名 CTA */
+.nav ul a.cta{color:var(--text);font-weight:700}
+.nav ul a.on{color:var(--text);background:var(--surface-2)}
+header.nav .nav-in{width:min(1180px,92vw);margin:0 auto}
 </style>
 </head>
 <body>
 
 <header class="nav">
-  <div class="wrap nav-in" style="padding:0;width:min(1180px,92vw)">
+  <div class="wrap nav-in">
     <a class="brand" href="index.html">
       <img src="assets/img/logo-tlstudio.png" alt="TLSTUDIO">
       <span>辣条杯 · 天外来物<small>2026—2027 LATIAO CUP</small></span>
     </a>
     <ul>
       <li><a href="index.html#about">赛事</a></li>
+      <li><a href="index.html#rules">规则</a></li>
       <li><a href="index.html#tasks">任务</a></li>
+      <li><a href="index.html#score">计分</a></li>
       <li><a href="index.html#download">下载</a></li>
       <li><a href="map.html">每日地图</a></li>
-      <li><a href="signup.html">报名</a></li>
       <li><a href="query.html">查结果</a></li>
-      <li><a href="login.html" style="color:var(--cyan)">我的报名</a></li>
+      <li><a href="login.html" class="on">我的报名</a></li>
+      <li><a href="signup.html" class="cta">报名 →</a></li>
     </ul>
   </div>
 </header>
@@ -272,7 +279,7 @@ function copyWithCheck(btn, text){
   if(!navigator.clipboard){ return Promise.reject(new Error("no clipboard")); }
   return navigator.clipboard.writeText(text).then(function(){
     const old = btn.innerHTML;
-    btn.innerHTML = "✓";
+    btn.innerHTML = '<svg class="si" style="width:1.05em;height:1.05em" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.2 8.6l3.1 3.1 6.5-7.1"/></svg>';
     setTimeout(function(){ btn.innerHTML = old; }, 2500);
   });
 }
